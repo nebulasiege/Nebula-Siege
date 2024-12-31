@@ -42,6 +42,7 @@ import Select from 'primevue/select'
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
+import axios from 'axios'
 
 export default {
   components: {
@@ -75,19 +76,37 @@ export default {
   },
   methods: {
     async submitForm() {
-      this.isSubmitting = true;
+      this.$store.commit('initializeStore')
+      localStorage.removeItem('access')
 
+      const userFromData = {
+        username:this.formData.email,
+        email:this.formData.email,
+        password: this.formData.password
+      }
+
+      axios
+          .post('/auth/jwt/create/',userFromData)
+          .then(response => {
+            console.log(response)
+            const access = response.data.access
+            const refresh = response.data.refresh
+            this.$store.commit('setAccess', access)
+            this.$store.commit('setRefresh', refresh)
+
+            axios.defaults.headers.common['Authorization'] = 'JWT ' + access
+            localStorage.setItem('access',access)
+            localStorage.setItem('refresh',refresh)
+
+            this.$router.push({ path: '/Account' })
+          })
+          .catch(error => {
+            console.log(error)
+          })
       if (Object.values(this.errors).some((error) => error)) {
         this.isSubmitting = false;
         return;
       }
-
-      // Simulate API call or form submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      this.isSubmitting = false;
-      this.submitted = true;
-      this.resetForm();
     },
     resetForm() {
       this.formData = {

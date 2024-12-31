@@ -26,6 +26,10 @@ export default createStore({
       console.log("dsfdsfdsdf")
       console.log(state)
         state.refresh = refresh
+    },
+    clear(state){
+      state.access = ''
+      state.refresh = ''    
     }
   }
 })

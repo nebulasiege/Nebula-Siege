@@ -3,8 +3,9 @@
     <h1>Nebula Seige</h1>
     <SignUp v-if="isUserNew"></SignUp>
     <LogIn v-else></LogIn>
-    <p v-if="isUserNew">Don't have an account <a href="#" id="remove" @click="toggleNewUserStatus(false)">signup</a></p>
-    <p v-else>Have an account <a href="#" id="remove" @click="toggleNewUserStatus(true)">login</a></p>
+    <p v-if="isUserNew">Have an account <a href="#" id="remove" @click="toggleNewUserStatus(false)">login</a></p>
+    <p v-else>Don't have an account <a href="#" id="remove" @click="toggleNewUserStatus(true)">signup</a></p>
+
 
     <DataTable :value="servers" tableStyle="min-width: 50rem">
     <Column field="server" header="Server"></Column>
@@ -41,7 +42,13 @@ export default {
     };
   },
   mounted() {
-    this.getMe()
+    this.$store.commit('initializeStore')
+
+    const access = this.$store.state.access
+    if(access !== ''){
+      this.getMe()
+
+    }
   },
   methods: {
     getMe(){

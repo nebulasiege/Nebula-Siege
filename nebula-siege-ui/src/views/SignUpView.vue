@@ -27,7 +27,7 @@ export default {
         username:this.username,
         password: this.password
       }
-
+      console.log(formData)
       axios
           .post('/auth/users/',formData)
           .then(response => {

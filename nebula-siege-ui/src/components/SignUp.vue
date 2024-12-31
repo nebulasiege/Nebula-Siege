@@ -4,7 +4,7 @@
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <label for="email">Server:</label>
-        <Select v-model="selectedCity" :options="cities" optionLabel="name" placeholder="Select a Server" class="w-full md:w-56"></Select>
+        <Select v-model="formData.server" :options="cities" optionLabel="name" placeholder="Select a Server" class="w-full md:w-56"></Select>
       </div>      
       <div class="form-group">
         <label for="name">Name:</label>
@@ -50,6 +50,7 @@ import Select from 'primevue/select'
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
+import axios from 'axios'
 
 export default {
   components: {
@@ -62,20 +63,21 @@ export default {
   data() {
     return {
       formData: {
+        server:'',
         name:'',
         email: '',
         password: ''
       },
       errors: {
+        server:null,
         name:null,
         email: null,
         message: null
       },
       isSubmitting: false,
       submitted: false,
-      selectedCity: 'New York',
       cities: [
-                { name: 'Alpha', code: 'A' },
+                { name: 'Alpha', code: 'A1' },
                 { name: 'Rome', code: 'RM' },
                 { name: 'London', code: 'LDN' },
                 { name: 'Istanbul', code: 'IST' },
@@ -84,20 +86,32 @@ export default {
     };
   },
   methods: {
-    async submitForm() {
-      this.isSubmitting = true;
-
-      if (Object.values(this.errors).some((error) => error)) {
-        this.isSubmitting = false;
-        return;
+     submitForm() {
+      this.$store.commit('initializeStore')
+      localStorage.removeItem('access')
+      const formDataUser = {
+        username:this.formData.name,
+        password: this.formData.password
       }
+      console.log(formDataUser)
+      axios
+          .post('/auth/users/',formDataUser)
+          .then(response => {
+            const access = response.data.access
+            const refresh = response.data.refresh
+            this.$store.commit('setAccess', access)
+            this.$store.commit('setRefresh', refresh)
 
-      // Simulate API call or form submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+            axios.defaults.headers.common['Authorization'] = 'JWT ' + access
+            localStorage.setItem('access',access)
+            localStorage.setItem('refresh',refresh)
 
-      this.isSubmitting = false;
-      this.submitted = true;
-      this.resetForm();
+            console.log(response)
+            this.$router.push({ path: '/about' })
+          })
+          .catch(error => {
+            console.log(error)
+          })
     },
     resetForm() {
       this.formData = {
