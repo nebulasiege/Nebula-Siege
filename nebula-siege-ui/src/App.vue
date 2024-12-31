@@ -1,11 +1,4 @@
 <template>
-  <!-- <nav>
-    <router-link to="/">Home</router-link>|
-    <router-link to="/about">About</router-link>|
-    <router-link to="/sign-up">signup</router-link>|
-    <router-link to="/login">login</router-link>| 
-    <router-link to="/logout">logout</router-link>
-  </nav> -->
   <router-view/>
 </template>
 <script>
@@ -13,68 +6,6 @@
 export default {
 
   name:'App',
-  // beforeCreate() {
-  //   this.$store.commit('initializeStore')
-
-  //   const access = this.$store.state.access
-  //   console.log("here" + access)
-
-  //   if(access){
-  //     axios.defaults.headers.common['Authorization'] = 'JWT ' + access
-  //   }else{
-  //     axios.defaults.headers.common['Authorization'] = ''
-  //   }
-  // },
-  // mounted(){
-  //   this.$store.commit('initializeStore')
-  //   const access = this.$store.state.access
-  //   const intervalId = localStorage.getItem('intervalId');
-  //   console.log(intervalId)
-  //   console.log(access)
-  //   if(access !== '' && intervalId){
-  //       const intervalHandler = setInterval(() => {
-  //         this.getAccess()
-  //         }, 5000);  
-  //         localStorage.setItem('intervalId', intervalHandler);
-
-  //   }else{
-  //     console.log("clear")
-  //     console.log(localStorage.getItem('intervalId'))
-  //     clearInterval(this.intervalHandler)
-  //   }
-  // },
-  // methods:{
-  //   getAccess(event){
-  //     console.log("Start getaccess")
-  //     console.log("Output refresh1" + this.$store.state.refresh)
-  //     const accessData = {
-  //       refresh: this.$store.state.refresh,
-  //       access: this.$store.state.access
-
-  //     }
-  //     console.log("output accessdate")
-
-  //     console.log(accessData)
-  //     console.log(accessData.access)
-  //     console.log(event)
-  //     console.log(accessData.access === '')
-
-  //     axios
-  //         .post('auth/jwt/refresh/',accessData)
-  //         .then(response => {
-  //           const access = response.data.access
-
-  //           localStorage.setItem("access", access)
-
-  //           this.$store.commit('setAccess',access)
-
-  //         })
-  //         .catch(error => {
-          
-  //           console.log(error)
-  //         })
-  //   }
-  // }
 }
 </script>
 <style>
